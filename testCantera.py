@@ -1,5 +1,4 @@
 #! simple test to ensure that cantera importeds and runs properly
-ipython3
 import numpy as np
 import cantera as ct
 
