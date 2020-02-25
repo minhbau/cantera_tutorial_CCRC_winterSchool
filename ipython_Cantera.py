@@ -1,15 +1,23 @@
 # ====================================================================
 #! download the tutorial 
 # ====================================================================
+# login to the remote workstation using your account
+ssh -Y ccws2020_user_X@10.77.90.22
+
+# then, copy and paste the following commands to the terminal
 cd $HOME
 git clone https://github.com/minhbau/cantera_tutorial_CCRC_winterSchool.git
 cd cantera_tutorial_CCRC_winterSchool
 
-# activate cantera enviroment
+# activate cantera environment by using this command 
 source /opt/cantera-2.4/bin/setup_cantera
 
-# run an example test
+# run an example test by using python3
 python3 example.py
+# ====================================================================
+
+
+
 
 # ====================================================================
 #! activate interactive ipython enviroment
