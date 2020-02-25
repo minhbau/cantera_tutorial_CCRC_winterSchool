@@ -1,4 +1,31 @@
-#!/usr/bin/python3
+# ====================================================================
+#! download the tutorial 
+# ====================================================================
+cd $HOME
+git clone https://github.com/minhbau/cantera_tutorial_CCRC_winterSchool.git
+cd cantera_tutorial_CCRC_winterSchool
+
+# activate cantera enviroment
+source /opt/cantera-2.4/bin/setup_cantera
+
+# run an example test
+python3 example.py
+
+# ====================================================================
+#! activate interactive ipython enviroment
+ipython3
+# run a python script inside ipython enviroment
+run ./example.py
+
+# get helps in IPython shell
+gas.species_index?
+
+# exit ipython enviroment
+exit()
+# ====================================================================
+
+
+# ====================================================================
 # load cantera
 import cantera as ct
 
@@ -17,6 +44,7 @@ print(ct.__version__)
 dir(cantera) 
 
 
+# ====================================================================
 # set the mechanism name
 gas = ct.Solution('gri30.xml')
 # the mechanism, gri30.xml
@@ -31,7 +59,7 @@ help(gas.__class__.T)
 dir(gas)
 
 
-# ------------------------------------------------------------------
+# ====================================================================
 print(gas.n_reactions) # number of reactions
 print(gas.n_species) # number of species
 print(gas.species_names) # returns a list of species names
@@ -120,4 +148,5 @@ print(P/ct.one_atm,ct.gas_constant,gas.T,gas.density,gas.mean_molecular_weight)
 # compute P by using EoS
 P = ct.gas_constant*gas.density*gas.T/gas.mean_molecular_weight
 print(P/ct.one_atm)
+# ====================================================================
 
