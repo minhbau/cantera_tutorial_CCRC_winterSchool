@@ -9,7 +9,7 @@ import pandas as pd
 print("Running Cantera Version: " + str(ct.__version__))
 
 def compute_thickness(flame_obj):
-    dTdx = np.gradient(flame_obj.T, flame_obj.flame.grid)
+    dTdx = np.gradient(flame_obj.T, flame_obj.grid)
     max_dTdx = np.max(dTdx)
     thickness = (flame_obj.T[-1] - flame_obj.T[0])/max_dTdx
     return thickness 
@@ -95,37 +95,19 @@ plt.style.use('seaborn-deep')
 
 plt.rcParams['figure.autolayout'] = True
 
-# #### Temperature Plot
-# plt.figure()
-# plt.plot(flame.grid*100, flame.T, '-o')
-# plt.xlabel('Distance (cm)')
-# plt.ylabel('Temperature (K)')
-# plt.savefig('TemperatureProfile', dpi=300)
-# plt.show()
-
-
-fig = plt.figure()
-ax = fig.add_subplot()
-
-lns1 = ax.plot(flame.grid*100, flame.T, '-', label = 'T')
-ax2 = ax.twinx()
-lns2 = ax2.plot(flame.grid*100, HRR, '-', label = 'HRR')
-
-# add legends together
-lns = lns1+lns2
-labs = [l.get_label() for l in lns]
-ax.legend(lns, labs, loc=0)
-
-ax.grid()
-ax.set_xlabel("Distance (cm)")
-ax.set_ylabel(r" T (K)")
-ax2.set_ylabel(r"HRR [$J/m^3/s$]")
-# ax2.set_ylim(0, 35)
-# ax.set_ylim(-20,100)
+#### Temperature Plot
+plt.figure()
+plt.plot(flame.grid*100, flame.T, '-o')
+plt.xlabel('Distance (cm)')
+plt.ylabel('Temperature (K)')
+plt.savefig('TemperatureProfile.pdf')
 plt.show()
 
-# plt.savefig('1Dflame_T_HRR', dpi=300,
-plt.savefig('1Dflame_T_HRR.pdf',bbox_inches='tight')
+plt.figure()
+plt.plot(flame.grid*100, HRR, '-o')
+plt.xlabel('Distance (cm)')
+plt.ylabel(r"HRR [$J/m^3/s$]")
+plt.savefig('HrrProfile.pdf', dpi=300)
 plt.show()
 
 # ========================================================================================
