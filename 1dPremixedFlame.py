@@ -7,15 +7,25 @@ A freely-propagating, premixed flat flame.
 ################################################################################
 import cantera as ct
 import numpy as np
+import matplotlib.pylab as plt
 
+def calcHRR(T, P, Yk):
+    HRR = np.zeros((T.shape))
+    Yspc = np.zeros(nSpcs)
+    for i in range(T.shape[0]):
+        Yspc[:] = Yk[:,i]
+        gas.TPY = T[i], P, Yspc
+        reactor = ct.IdealGasReactor(gas)
+        HRR[i] = -np.dot(reactor.kinetics.net_production_rates,\
+        reactor.thermo.partial_molar_enthalpies)
+    return HRR
+# HRR = calcHRR(flame.T,flame.P,flame.Y)
 
 ################################################################################
 # function to compute flame thickness
 ################################################################################
 def compute_thickness(flame_obj):
-    # print(flame_obj.T)
-    # print(flame_obj.flame.grid)
-    dTdx = np.gradient(flame_obj.T, flame_obj.flame.grid)
+    dTdx = np.gradient(flame_obj.T, flame_obj.grid)
     max_dTdx = np.max(dTdx)
     thickness = (flame_obj.T[-1] - flame_obj.T[0])/max_dTdx
     return thickness 
@@ -38,6 +48,7 @@ loglevel = 0  # amount of diagnostic output (0 to 8)
 # IdealGasMix object used to compute mixture properties, set to the state of the
 # upstream fuel-air mixture
 gas = ct.Solution('gri30.xml')
+nSpcs = gas.n_species
 gas.TPX = Tin, p, reactants
 
 # Set equivalence ratio
@@ -99,3 +110,38 @@ f.write_csv('sol_freeflame_multi_soret.csv', species='X', quiet=False)
 # flame_thickness = compute_thickness(f)
 # print('Flame thickness = {0:4e} m'.format(flame_thickness))
 
+# compute the heat release rate
+HRR = calcHRR(f.T,f.P,f.Y)
+
+# ========================================================================================
+###! Plot figures
+# ========================================================================================
+# Import plotting modules and define plotting preference
+# import matplotlib.pylab as plt
+
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
+plt.rcParams['legend.fontsize'] = 10
+plt.rcParams['figure.figsize'] = (8,6)
+
+# Get the best of both ggplot and seaborn
+plt.style.use('ggplot')
+plt.style.use('seaborn-deep')
+
+plt.rcParams['figure.autolayout'] = True
+
+#### Temperature Plot
+plt.figure()
+plt.plot(f.grid*100, f.T, '-o')
+plt.xlabel('Distance (cm)')
+plt.ylabel('Temperature (K)')
+plt.savefig('Tmulti_Profile.pdf')
+plt.show()
+
+plt.figure()
+plt.plot(f.grid*100, HRR, '-o')
+plt.xlabel('Distance (cm)')
+plt.ylabel(r"HRR [$J/m^3/s$]")
+plt.savefig('HRRmulti_Profile.pdf', dpi=300)
+plt.show()

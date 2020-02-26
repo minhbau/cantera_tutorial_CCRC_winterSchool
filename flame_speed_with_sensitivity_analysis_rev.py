@@ -4,7 +4,7 @@ from __future__ import division
 import cantera as ct
 import numpy as np
 import matplotlib.pylab as plt
-import pandas as pd
+# import pandas as pd
 
 print("Running Cantera Version: " + str(ct.__version__))
 
@@ -17,7 +17,7 @@ def compute_thickness(flame_obj):
 def calcHRR(T, P, Yk):
     HRR = np.zeros((T.shape))
     Yspc = np.zeros(nSpcs)
-    for i in range(flame.T.shape[0]):
+    for i in range(T.shape[0]):
         Yspc[:] = Yk[:,i]
         gas.TPY = T[i], P, Yspc
         reactor = ct.IdealGasReactor(gas)
@@ -38,7 +38,6 @@ Po = 101325
 #In this case, we are choosing a GRI3.0 gas
 gas = ct.Solution('gri30.xml')
 
-spcsName = gas.species_names
 nSpcs = gas.n_species
 
 # Create a stoichiometric CH4/Air premixed mixture 
@@ -71,9 +70,9 @@ print("Flame Speed is: {:.2f} cm/s".format(Su0*100))
 # compute the heat release rate
 HRR = calcHRR(flame.T,flame.P,flame.Y)
 
-# Determine the flame thickness
-flame_thickness = compute_thickness(flame)
-print('Flame thickness = {0:4e} m'.format(flame_thickness))
+# # Determine the flame thickness
+# flame_thickness = compute_thickness(flame)
+# print('Flame thickness = {0:4e} m'.format(flame_thickness))
 
 #Note that the variable Su0 will also be used downsteam in the sensitivity analysis
 
@@ -100,14 +99,14 @@ plt.figure()
 plt.plot(flame.grid*100, flame.T, '-o')
 plt.xlabel('Distance (cm)')
 plt.ylabel('Temperature (K)')
-plt.savefig('TemperatureProfile.pdf')
+plt.savefig('T_Profile.pdf')
 plt.show()
 
 plt.figure()
 plt.plot(flame.grid*100, HRR, '-o')
 plt.xlabel('Distance (cm)')
 plt.ylabel(r"HRR [$J/m^3/s$]")
-plt.savefig('HrrProfile.pdf', dpi=300)
+plt.savefig('HRR_Profile.pdf', dpi=300)
 plt.show()
 
 # ========================================================================================
@@ -136,7 +135,6 @@ plt.xlabel('Distance (cm)')
 plt.ylabel('MoleFractions')
 # plt.savefig('MajorSpecies', dpi=300)
 plt.savefig('MajorSpecies.pdf')
-
 plt.show()
 
 
@@ -146,7 +144,7 @@ plt.show()
 
 # ========================================================================================
 #!Import a data frame module. This simplifies the code
-# import pandas as pd
+import pandas as pd
 # ========================================================================================
 # Create a dataframe to store sensitivity-analysis data
 sensitivities = pd.DataFrame(data=[], index=gas.reaction_equations(range(gas.n_reactions)))
