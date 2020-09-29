@@ -39,16 +39,26 @@ Open your browser an go to
 ```
 https://github.com/minhbau/cantera_tutorial_CCRC_winterSchool
 ```
-Download a zip file of  cantera_tutorial_CCRC_winterSchool and unzip it to your local machine
+to download a zip file of cantera_tutorial_CCRC_winterSchool and unzip it to your local machine
 then go the unzip directory, for example 
 
-from "terminal", type
 ```
 cd $HOME/Downloads/cantera_tutorial_CCRC_winterSchool
-```
-and run the test
-python example.py
 
+```
+or from "terminal", type
+
+```
+cd $HOME/Downloads/
+git clone https://github.com/minhbau/cantera_tutorial_CCRC_winterSchool.git
+
+```
+
+and run a test
+```
+cd $HOME/Downloads/cantera_tutorial_CCRC_winterSchool
+python example.py
+```
 
 To logout the the cantera_py3 environment
 ``` 
